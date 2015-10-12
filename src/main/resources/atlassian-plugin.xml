@@ -1,0 +1,20 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+
+	<plugin-info>
+		<description>${project.description}</description>
+		<version>${project.version}</version>
+		<vendor name="${project.organization.name}" url="${project.organization.url}" />
+		<param name="plugin-icon">images/plugin_ico_16x16.png</param>
+	</plugin-info>
+    
+	<gadget key="nagios-glance-gadget" name="Nagios Glance" location="gadget.xml" />
+
+    <resource type="download" name="i18n/ALL_ALL.xml" location="i18n/ALL_ALL.xml">
+        <param name="content-type" value="text/xml; charset=UTF-8"/>
+    </resource>
+
+	<web-resource key="nagios-glance-gadget-resources" name="nagios-glance-gadget Web Resources">
+		<resource type="download" name="gadget-thumb.png" location="images/gadget-thumb.png"/>
+	</web-resource>
+
+</atlassian-plugin>

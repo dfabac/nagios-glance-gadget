@@ -1,0 +1,4 @@
+<messagebundle>
+	<msg name="gadget.title">Nagios Glance</msg>
+	<msg name="gadget.description">Gadget de dashboard Nagios Glance</msg>
+</messagebundle>

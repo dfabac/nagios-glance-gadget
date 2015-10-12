@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs
+			title="__MSG_gadget.title__"
+			author="dfabac"
+			author_email="dfabac@gmail.com"
+			description="__MSG_gadget.description__"
+			thumbnail='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "gadget-thumb.png")'>
+		<Optional feature="gadget-directory">
+			<Param name="categories">Other</Param>
+		</Optional>
+		<Optional feature="atlassian.util" />
+		<Require feature="dynamic-height" />
+		<Require feature="settitle" />
+		<Require feature="oauthpopup" />
+		<Locale messages='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/ALL_ALL.xml")'/>
+		#oauth
+	</ModulePrefs>
+
+	<Content type="html" view="profile"><![CDATA[
+		#requireResource("com.atlassian.gadgets.publisher:ajs-gadgets")
+		#includeResources()
+
+		<style TYPE="text/css">
+			table {
+				width: 100%;
+				padding:4px;
+			}
+		</style>
+
+		<script type="text/javascript">
+			(function () {
+                var gadget = AJS.Gadget({
+                    baseUrl: "__ATLASSIAN_BASE_URL__",
+                    useOauth: "/rest/gadget/1.0/currentUser",
+                    view: {
+                        template: function(args) {
+                            var gadget = this;
+
+                            var projectList = AJS.$("<table/>");
+
+                            AJS.$(args.dataProblems.problems.critical.items).each(function() {
+                                projectList.append(
+                                    AJS.$("<tr/>").append(
+                                    	AJS.$("<td/>").append(
+	                                        this.last_check
+	                                    ),
+	                                    AJS.$("<td/>").append(
+	                                       	AJS.$("<a/>").attr({
+	                                            target: "_parent",
+	                                            href: "__ATLASSIAN_BASE_URL__"
+	                                        }).text(this.host)
+	                                    ),
+	                                    AJS.$("<td/>").append(  
+	                                        AJS.$("<a/>").attr({
+	                                            target: "_parent",
+	                                            title: gadgets.util.escapeString(this.status_info),
+	                                            href: "__ATLASSIAN_BASE_URL__"
+	                                        }).text(this.service)
+	                                    )
+                                    )
+                                );
+                            });
+
+                            AJS.$(args.dataProblems.problems.warning.items).each(function() {
+                                projectList.append(
+                                    AJS.$("<tr/>").append(
+                                    	AJS.$("<td/>").append(
+	                                        this.last_check
+	                                    ),
+	                                    AJS.$("<td/>").append(
+	                                       	AJS.$("<a/>").attr({
+	                                            target: "_parent",
+	                                            href: "__ATLASSIAN_BASE_URL__"
+	                                        }).text(this.host)
+	                                    ),
+	                                    AJS.$("<td/>").append(  
+	                                        AJS.$("<a/>").attr({
+	                                            target: "_parent",
+	                                            title: gadgets.util.escapeString(this.status_info),
+	                                            href: "__ATLASSIAN_BASE_URL__"
+	                                        }).text(this.service)   
+	                                    )
+                                    )
+                                );
+                            });
+
+                            gadget.getView().html(projectList);
+                        },
+                        args: [{
+                            key: "dataProblems",
+                            ajaxOptions: function() {
+                                return {
+                                    url: "http://127.0.0.1/problems.json"
+                                };
+                            }
+                        }]
+                    }
+                });
+            })();
+		</script>
+
+	]]></Content>
+</Module>
