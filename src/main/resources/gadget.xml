@@ -13,11 +13,18 @@
 		<Require feature="dynamic-height" />
 		<Require feature="settitle" />
 		<Require feature="oauthpopup" />
+		<Require feature="views" />
+		<Require feature="setprefs" />
 		<Locale messages='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/ALL_ALL.xml")'/>
 		#oauth
+		#supportedLocales("gadget.common")
 	</ModulePrefs>
 
-	<Content type="html" view="profile"><![CDATA[
+	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
+	<UserPref name="refresh" datatype="hidden" default_value="false" />
+	<UserPref name="problemsUrl" datatype="hidden" default_value="http://monitoriza.irtve.rtve.int/wsnagios/problems" />
+
+	<Content type="html"><![CDATA[
 		#requireResource("com.atlassian.gadgets.publisher:ajs-gadgets")
 		#includeResources()
 
@@ -33,7 +40,25 @@
                 var gadget = AJS.Gadget({
                     baseUrl: "__ATLASSIAN_BASE_URL__",
                     useOauth: "/rest/gadget/1.0/currentUser",
+					config: {
+                        descriptor: function (args) {
+							return {
+                                fields: [
+									{
+										userpref: 'problemsURL',
+										label: 'WSNagios problems URL:',
+										description: 'URL de WSNAgios problems',
+										type: 'text',	
+										value: this.getPref('problemsUrl')
+									},
+									AJS.gadget.fields.nowConfigured()
+								]
+                            };
+                        },
+                        args: []
+                    },
                     view: {
+						enableReload: true,
                         template: function(args) {
                             var gadget = this;
 
@@ -91,7 +116,7 @@
                             key: "dataProblems",
                             ajaxOptions: function() {
                                 return {
-                                    url: "http://127.0.0.1/problems.json"
+                                    url: gadget.getPref('problemsUrl')
                                 };
                             }
                         }]
