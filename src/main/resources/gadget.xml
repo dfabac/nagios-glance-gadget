@@ -22,7 +22,7 @@
 
 	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
-	<UserPref name="problemsUrl" datatype="hidden" default_value="http://monitoriza.irtve.rtve.int/wsnagios/problems" />
+	<UserPref name="problemsURL" datatype="hidden" default_value="http://monitoriza.irtve.rtve.int/wsnagios/problems" />
 
 	<Content type="html"><![CDATA[
 		#requireResource("com.atlassian.gadgets.publisher:ajs-gadgets")
@@ -46,10 +46,10 @@
                                 fields: [
 									{
 										userpref: 'problemsURL',
-										label: 'WSNagios problems URL:',
-										description: 'URL de WSNAgios problems',
-										type: 'text',	
-										value: this.getPref('problemsUrl')
+										label: 'problems URL:',
+										description: 'URL de WSNagios problems',
+										type: 'text',
+										value: this.getPref('problemsURL')
 									},
 									AJS.gadget.fields.nowConfigured()
 								]
@@ -116,7 +116,7 @@
                             key: "dataProblems",
                             ajaxOptions: function() {
                                 return {
-                                    url: gadget.getPref('problemsUrl')
+                                    url: this.getPref('problemsURL')
                                 };
                             }
                         }]
