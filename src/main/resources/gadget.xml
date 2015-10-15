@@ -118,7 +118,8 @@
 
 							);
 
-                            gadget.getView().append(projectList, summary);
+							this.getView().html(projectList);
+                            this.getView().append(summary);
                         },
                         args: [{
                             key: "dataProblems",
