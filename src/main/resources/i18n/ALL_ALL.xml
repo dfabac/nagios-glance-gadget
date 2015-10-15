@@ -1,4 +1,6 @@
 <messagebundle>
 	<msg name="nagios-gadget.title">Nagios Glance</msg>
 	<msg name="nagios-gadget.description">Gadget Nagios Glance for JIRA Dashboard</msg>
+	<msg name="nagios-gadget.config.urllabel">JSON URL</msg>
+	<msg name="nagios-gadget.config.urldesc">WSNagios problems URL</msg>
 </messagebundle>

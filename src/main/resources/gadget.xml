@@ -61,8 +61,8 @@
                                 fields: [
 									{
 										userpref: 'problemsURL',
-										label: 'problems URL:',
-										description: 'URL de WSNagios problems',
+										label: "__MSG_nagios-gadget.config.urllabel__",
+										description: "__MSG_nagios-gadget.config.urldesc__",
 										type: 'text',
 										value: this.getPref('problemsURL')
 									},
