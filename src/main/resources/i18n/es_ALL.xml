@@ -1,0 +1,4 @@
+<messagebundle>
+	<msg name="nagios-gadget.title">Vistazo a Nagios</msg>
+	<msg name="nagios-gadget.description">Gadget Nagios Glance para JIRA Dashboard</msg>
+</messagebundle>

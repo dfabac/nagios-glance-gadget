@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
 	<ModulePrefs
-			title="__MSG_gadget.title__"
+			title="__MSG_nagios-gadget.title__"
 			author="dfabac"
 			author_email="dfabac@gmail.com"
-			description="__MSG_gadget.description__"
+			description="__MSG_nagios-gadget.description__"
 			thumbnail='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "gadget-thumb.png")'>
 		<Optional feature="gadget-directory">
 			<Param name="categories">Other</Param>
@@ -15,9 +15,10 @@
 		<Require feature="oauthpopup" />
 		<Require feature="views" />
 		<Require feature="setprefs" />
-		<Locale messages='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/ALL_ALL.xml")'/>
 		#oauth
 		#supportedLocales("gadget.common")
+		<Locale messages='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/ALL_ALL.xml")' />
+		<Locale lang="es" messages='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/es_ALL.xml")' />
 	</ModulePrefs>
 
 	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
