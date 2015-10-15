@@ -30,9 +30,23 @@
 		#includeResources()
 
 		<style TYPE="text/css">
+
+			span { 
+				margin-left : 5px; 
+			}
 			table {
-				width: 100%;
-				padding:4px;
+				width   : 100%;
+				padding : 2px;
+			}
+			tr.critical {
+				border-right  : 1px solid #FB7A31;
+				border-bottom : 1px solid #FB7A31;
+				background    : #ff9b9b;
+			}
+			tr.warning  {
+				border-right  : 1px solid #ffff00;
+				border-bottom : 1px solid #ffff00;
+				background    : #ffff80;
 			}
 		</style>
 
@@ -61,57 +75,50 @@
                     view: {
 						enableReload: true,
                         template: function(args) {
-                            var gadget = this;
 
                             var projectList = AJS.$("<table/>");
 
-                            AJS.$(args.dataProblems.problems.critical.items).each(function() {
-                                projectList.append(
-                                    AJS.$("<tr/>").append(
-                                    	AJS.$("<td/>").append(
-	                                        this.last_check
-	                                    ),
-	                                    AJS.$("<td/>").append(
-	                                       	AJS.$("<a/>").attr({
-	                                            target: "_parent",
-	                                            href: "__ATLASSIAN_BASE_URL__"
-	                                        }).text(this.host)
-	                                    ),
-	                                    AJS.$("<td/>").append(  
-	                                        AJS.$("<a/>").attr({
-	                                            target: "_parent",
-	                                            title: gadgets.util.escapeString(this.status_info),
-	                                            href: "__ATLASSIAN_BASE_URL__"
-	                                        }).text(this.service)
-	                                    )
-                                    )
-                                );
-                            });
+							function populate(data, stylename, container) {
+								 AJS.$(data).each(function() {
+									container.append(
+										AJS.$("<tr/>").append(
+											AJS.$("<td/>").append(
+												this.last_check
+											),
+											AJS.$("<td/>").append(
+												AJS.$("<a/>").attr({
+													target: "_parent",
+													href: "__ATLASSIAN_BASE_URL__"
+												}).text(this.host)
+											),
+											AJS.$("<td/>").append(  
+												AJS.$("<a/>").attr({
+													target: "_parent",
+													title: gadgets.util.escapeString(this.status_info),
+													href: "__ATLASSIAN_BASE_URL__"
+												}).text(this.service)
+											)
+										).attr(
+											{ class : stylename }
+										)
+									);
+								});
+							}
 
-                            AJS.$(args.dataProblems.problems.warning.items).each(function() {
-                                projectList.append(
-                                    AJS.$("<tr/>").append(
-                                    	AJS.$("<td/>").append(
-	                                        this.last_check
-	                                    ),
-	                                    AJS.$("<td/>").append(
-	                                       	AJS.$("<a/>").attr({
-	                                            target: "_parent",
-	                                            href: "__ATLASSIAN_BASE_URL__"
-	                                        }).text(this.host)
-	                                    ),
-	                                    AJS.$("<td/>").append(  
-	                                        AJS.$("<a/>").attr({
-	                                            target: "_parent",
-	                                            title: gadgets.util.escapeString(this.status_info),
-	                                            href: "__ATLASSIAN_BASE_URL__"
-	                                        }).text(this.service)   
-	                                    )
-                                    )
-                                );
-                            });
+							populate(args.dataProblems.problems.critical.items, 'critical', projectList);
+							populate(args.dataProblems.problems.warning.items,  'warning',  projectList);
 
-                            gadget.getView().html(projectList);
+							summary = AJS.$("<div/>").append(
+								AJS.$("<span/>").append(
+									"c: " + args.dataProblems.problems.critical.total
+								),
+								AJS.$("<span/>").append(
+									"w: " + args.dataProblems.problems.warning.total
+								)
+
+							);
+
+                            gadget.getView().append(projectList, summary);
                         },
                         args: [{
                             key: "dataProblems",
