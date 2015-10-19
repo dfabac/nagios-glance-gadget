@@ -6,8 +6,8 @@
     <artifactId>nagios-glance-gadget</artifactId>
     <version>1.0-SNAPSHOT</version>
     <organization>
-        <name>rtve.es</name>
-        <url>http://www.rtve.es/</url>
+        <name>dfabac</name>
+        <url>https://github.com/dfabac/nagios-glance-gadget</url>
     </organization>
     <name>Nagios Glance</name>
     <description>Plugin para JIRA que contiene el gadget de dashboard Nagios Glance</description>
