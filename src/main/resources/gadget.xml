@@ -5,7 +5,7 @@
 			author="dfabac"
 			author_email="dfabac@gmail.com"
 			description="__MSG_nagios-gadget.description__"
-			thumbnail='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "gadget-thumb.png")'>
+			thumbnail='#staticResourceUrl("com.dfabac.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "gadget-thumb.png")'>
 		<Optional feature="gadget-directory">
 			<Param name="categories">Other</Param>
 		</Optional>
@@ -17,21 +17,22 @@
 		<Require feature="setprefs" />
 		#oauth
 		#supportedLocales("gadget.common")
-		<Locale messages='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/ALL_ALL.xml")' />
-		<Locale lang="es" messages='#staticResourceUrl("com.rtve.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/es_ALL.xml")' />
+		<Locale messages='#staticResourceUrl("com.dfabac.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/ALL_ALL.xml")' />
+		<Locale lang="es" messages='#staticResourceUrl("com.dfabac.pluginsjira.nagios-glance-gadget:nagios-glance-gadget-resources", "i18n/es_ALL.xml")' />
 	</ModulePrefs>
 
 	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
 	<UserPref name="problemsURL" datatype="hidden" default_value="http://monitoriza.irtve.rtve.int/wsnagios/problems" />
 
-	<Content type="html"><![CDATA[
-		#requireResource("com.atlassian.gadgets.publisher:ajs-gadgets")
+	<Content type="html">
+		<![CDATA[
 		#requireResource("com.atlassian.auiplugin:ajs")
+		#requireContext("com.atlassian.jira.gadgets:common-lite")
+		#requireResource("jira.webresources:dropdown")
 		#includeResources()
 
-		<style TYPE="text/css">
-
+		<style type="text/css">
 			div span { 
 				margin-left : 5px; 
 			}
@@ -42,16 +43,16 @@
 				height  : 20px;
 			}
 			tr.critical {
-				border-right  : 1px solid #FB7A31;
-				border-bottom : 1px solid #FB7A31;
+				border-right  : 1px solid #E83535;
+				border-bottom : 1px solid #E83535;
 				background    : #ff9b9b;
 			}
 			tr.warning  {
-				border-right  : 1px solid #ffff00;
-				border-bottom : 1px solid #ffff00;
-				background    : #ffff80;
+				border-right  : 1px solid #F7F700;
+				border-bottom : 1px solid #F7F700;
+				background    : #FCFCAC;
 			}
-			td.actions {
+			td.menu {
 				width: 16px;
 			}
 			table tr td a span.aui-icon { 
@@ -63,57 +64,9 @@
 		</style>
 
 		<script type="text/javascript">
-
-			function populate(data, stylename, container) {
-				 AJS.$(data).each(function() {
-					container.append(
-						AJS.$("<tr/>").append(
-							AJS.$("<td/>").append(
-								this.last_check
-							),
-							AJS.$("<td/>").append(
-								AJS.$("<a/>").attr({
-									target: "_parent",
-									href: "__ATLASSIAN_BASE_URL__"
-								}).text(this.host)
-							),
-							AJS.$("<td/>").append(  
-								AJS.$("<a/>").attr({
-									target: "_parent",
-									title: gadgets.util.escapeString(this.status_info),
-									href: "__ATLASSIAN_BASE_URL__"
-								}).text(this.service)
-							),
-							AJS.$("<td class='actions' />").append(
-								AJS.$("<a aria-owns='menuoptions' aria-haspopup='true' />").attr({
-									href: "#menuoptions",
-									class: "aui-dropdown2-trigger aui-style-default"
-								}).append(
-									AJS.$("<span/>").attr(
-										{ class : "aui-icon aui-icon-small aui-iconfont-configure" }
-									)
-								),
-								AJS.$("<div id='menuoptions' />").append(
-									AJS.$("<a/>").text("__MSG_nagios-gadget.actions.viewserv__"),
-									AJS.$("<a/>").attr({
-											target: "_blank",
-											href: "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
-										}
-									).text("__MSG_nagios-gadget.actions.viewhost__"),
-									AJS.$("<a/>").text("__MSG_nagios-gadget.actions.acknowledge__"),
-									AJS.$("<a/>").text("__MSG_nagios-gadget.actions.pinghost__"),
-									AJS.$("<a/>").text("__MSG_nagios-gadget.actions.copyhost__"),
-									AJS.$("<a/>").text("__MSG_nagios-gadget.actions.related__"),
-									AJS.$("<a/>").text("__MSG_nagios-gadget.actions.create__")
-								).attr({ class : 'aui-dropdown2 aui-style-default' })
-							)
-						).attr(
-							{ class : stylename }
-						)
-					);
-				});
-			}
-
+			
+			var contextPath = "__ATLASSIAN_BASE_URL__";
+			
 			(function () {
                 var gadget = AJS.Gadget({
                     baseUrl: "__ATLASSIAN_BASE_URL__",
@@ -139,10 +92,141 @@
 						enableReload: true,
                         template: function(args) {
 
-                            var projectList = AJS.$("<table/>");
+                        	var gadget = this;
 
-							populate(args.dataProblems.problems.critical.items, 'critical', projectList);
-							populate(args.dataProblems.problems.warning.items,  'warning',  projectList);
+                        	var actionsurl = gadget.getBaseUrl() 
+                        		+ "/rest/nagiosglanceactions/latest/actions";
+                        		+ "?host="    + this.host 
+                        		+ "&service=" + this.service;
+
+							function populate(data, stylename, container) {
+								 AJS.$(data).each(function() {
+									container.append(
+										AJS.$("<tr/>").append(
+											AJS.$("<td/>").append(
+												this.last_check
+											),
+											AJS.$("<td/>").append(
+												AJS.$("<a/>").attr({
+													target: "_parent",
+													href: "__ATLASSIAN_BASE_URL__"
+												}).text(this.host)
+											),
+											AJS.$("<td/>").append(  
+												AJS.$("<a/>").attr({
+													target: "_parent",
+													title: gadgets.util.escapeString(this.status_info),
+													href: "__ATLASSIAN_BASE_URL__"
+												}).text(this.service)
+											),
+											AJS.$("<td class='menu'/>").append(
+												AJS.$("<a/>").addClass("lnk aui-dd-link")
+												.attr("href",  actionsurl)
+												.append(
+				            		 				AJS.$("<span/>")
+				            		 				.addClass("aui-icon aui-icon-small aui-iconfont-configure") 
+												)
+											)
+										).attr(
+											{ class : stylename }
+										)
+									);
+								});
+							}
+
+							AJS.$(document.body).delegate("a.aui-dd-link", "click", function (e) {
+
+								var $this = AJS.$(this);
+
+								if (!$this.data("dropdown-bound")) {
+
+									$this.data("dropdown-bound", true);
+
+									e.preventDefault();
+									e.stopPropagation();
+
+									AJS.Dropdown.create({
+										trigger: this,
+										autoScroll: false,
+										ajaxOptions:
+										{
+											cache: false,
+											formatSuccess: function (response) {
+
+												var html= AJS.$("<div class='aui-list' />");
+												var list = AJS.$("<ul />").appendTo(html);
+
+												AJS.$(response.actions).each(function(){
+													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
+													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
+														.attr("href", gadget.getBaseUrl() + this.title).text(this.path);
+													listItemNode.append(linkNode);
+													list.append(listItemNode);
+												});
+
+												return html;
+
+												/*
+												var options = [
+													{
+														title : "__MSG_nagios-gadget.actions.viewserv__",
+														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
+													},
+													{
+														title : "__MSG_nagios-gadget.actions.viewhost__",
+														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
+													},
+													{
+														title : "__MSG_nagios-gadget.actions.acknowledge__",
+														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
+													},
+													{
+														title : "__MSG_nagios-gadget.actions.pinghost__",
+														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
+													},
+													{
+														title : "__MSG_nagios-gadget.actions.copyhost__",
+														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
+													},
+													{
+														title : "__MSG_nagios-gadget.actions.related__",
+														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
+													},
+													{
+														title : "__MSG_nagios-gadget.actions.create__",
+														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
+													}
+												];
+												
+
+												var html= AJS.$("<div class='aui-list' />");
+												var list = AJS.$("<ul />").appendTo(html);
+												
+												AJS.$(options).each(function() {
+													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
+													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
+														.attr("href", gadget.getBaseUrl() + this.key)
+														.text(this.title);
+													listItemNode.append(linkNode);
+													list.append(listItemNode);
+												});
+												
+												return html;
+												*/
+											}
+										}
+                                	});
+
+									$this.click();
+								}
+							});
+
+							gadget.showLoading();
+
+                            var serviceList = AJS.$("<table/>");
+
+							populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
+							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
 
 							summary = AJS.$("<div/>").append(
 								AJS.$("<span/>").append(
@@ -153,8 +237,10 @@
 								)
 							);
 
-							this.getView().html(projectList);
+							this.getView().html(serviceList);
                             this.getView().append(summary);
+
+                            gadget.hideLoading();
                         },
                         args: [{
                             key: "dataProblems",
