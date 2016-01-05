@@ -8,16 +8,16 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class NagiosGlanceActionsModel {
 
-    @XmlElement(name = "actions")
-    private List<NagiosAction> actions = null;
- 
-    public NagiosGlanceActionsModel() {}
+	@XmlElement(name = "actions")
+	private List<NagiosAction> actions = null;
 
-    public List<NagiosAction> getActions() {
-        return actions;
-    }
+	public NagiosGlanceActionsModel() {}
 
-    public void setActions(List<NagiosAction> actions) {
-        this.actions = actions;
-    }
+	public List<NagiosAction> getActions() {
+		return actions;
+	}
+
+	public void setActions(List<NagiosAction> actions) {
+		this.actions = actions;
+	}
 }

@@ -1,6 +1,7 @@
 package com.dfabac.pluginsjira.rest;
 
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
+import com.atlassian.sal.api.message.I18nResolver;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -9,16 +10,22 @@ import java.util.ArrayList;
 
 
 @Path("/actions")
-public class NagiosGlanceActions {
+public class NagiosGlance {
 
-    @GET
-    @AnonymousAllowed
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getActions(@QueryParam("host") String host, @QueryParam("service") String svc)
+	private I18nResolver i18n;
+
+	public void setI18nResolver(I18nResolver i18n) {
+		this.i18n = i18n;
+	}
+
+	@GET
+	@AnonymousAllowed
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getActions(@QueryParam("host") String host, @QueryParam("service") String svc)
 	{
 		ArrayList<NagiosAction> actions = new ArrayList<NagiosAction>();
-		actions.add(this.makeActionOpenHost(host));
 		actions.add(this.makeActionOpenSvc(host, svc));
+		actions.add(this.makeActionOpenHost(host));
 
 		NagiosGlanceActionsModel ng = new NagiosGlanceActionsModel();
 		ng.setActions(actions);
@@ -33,6 +40,7 @@ public class NagiosGlanceActions {
 
 	private NagiosAction makeActionOpenSvc(String host, String svc)
 	{
-		return new NagiosAction("example1"+host, "example1"+svc);
+		String path = "/cgi-bin/nagios3/extinfo.cgi?type=2&host=" + host + "&service=" + svc;
+		return new NagiosAction(i18n.getText("com.dfabac.pluginsjira.nagios-glance-gadget.actions.viewserv"), path);
 	}
 }

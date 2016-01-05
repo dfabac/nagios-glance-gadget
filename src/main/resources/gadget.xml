@@ -84,23 +84,24 @@
 									},
 									AJS.gadget.fields.nowConfigured()
 								]
-                            };
-                        },
-                        args: []
-                    },
-                    view: {
+							};
+						},
+						args: []
+					},
+					view: {
 						enableReload: true,
-                        template: function(args) {
+						template: function(args) {
 
-                        	var gadget = this;
-
-                        	var actionsurl = gadget.getBaseUrl() 
-                        		+ "/rest/nagiosglanceactions/latest/actions";
-                        		+ "?host="    + this.host 
-                        		+ "&service=" + this.service;
+							var gadget = this;
 
 							function populate(data, stylename, container) {
 								 AJS.$(data).each(function() {
+
+		 							var actionsurl = gadget.getBaseUrl() 
+										+ "/rest/nagiosglance/latest/actions"
+										+ "?host="    + this.host 
+										+ "&service=" + this.service;
+
 									container.append(
 										AJS.$("<tr/>").append(
 											AJS.$("<td/>").append(
@@ -123,8 +124,7 @@
 												AJS.$("<a/>").addClass("lnk aui-dd-link")
 												.attr("href",  actionsurl)
 												.append(
-				            		 				AJS.$("<span/>")
-				            		 				.addClass("aui-icon aui-icon-small aui-iconfont-configure") 
+													AJS.$("<span/>").addClass("aui-icon aui-icon-small aui-iconfont-configure")
 												)
 											)
 										).attr(
@@ -159,7 +159,7 @@
 												AJS.$(response.actions).each(function(){
 													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
 													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
-														.attr("href", gadget.getBaseUrl() + this.title).text(this.path);
+														.attr("href", gadget.getBaseUrl() + this.path).text(this.title);
 													listItemNode.append(linkNode);
 													list.append(listItemNode);
 												});

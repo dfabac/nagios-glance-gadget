@@ -10,7 +10,7 @@ public class NagiosAction
 	private String path;
 
 	public NagiosAction() {}
-     
+
 	public NagiosAction(String title, String path) {
 		this.title = title;
 		this.path = path;
