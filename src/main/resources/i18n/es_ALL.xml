@@ -3,11 +3,4 @@
 	<msg name="nagios-gadget.description">Gadget Nagios Glance para JIRA Dashboard</msg>
 	<msg name="nagios-gadget.config.urllabel">JSON URL</msg>
 	<msg name="nagios-gadget.config.urldesc">URL de WSNagios problems</msg>
-	<msg name="nagios-gadget.actions.viewserv">Ver servicio en Nagios</msg>
-	<msg name="nagios-gadget.actions.viewhost">Ver host en Nagios</msg>
-	<msg name="nagios-gadget.actions.acknowledge">Reconocer alarma</msg>
-	<msg name="nagios-gadget.actions.pinghost">Ping al host</msg>
-	<msg name="nagios-gadget.actions.copyhost">Host al portapapeles</msg>
-	<msg name="nagios-gadget.actions.related">JIRAs relacionados</msg>
-	<msg name="nagios-gadget.actions.create">Crear JIRA</msg>
 </messagebundle>

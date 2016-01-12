@@ -23,12 +23,12 @@
     <resource type="download" name="gadget-thumb.png" location="images/gadget-thumb.png"/>
   </web-resource>
 
-  <resource type="i18n" name="nagios-glance-gadget" location="com.dfabac.pluginsjira.nagios-glance-gadget"/>
+  <resource type="i18n" name="i18n" location="com.dfabac.pluginsjira.nagios-glance"/>
   
   <component-import key="i18nResolver" interface="com.atlassian.sal.api.message.I18nResolver"/>
 
-  <rest name="Nagios Glance" i18n-name-key="nagios-glance.name" key="nagios-glance-actions" path="/nagiosglance" version="1.0">
-    <description key="nagios-glance.description">Nagios Glance Plugin REST Resources</description>
+  <rest name="Nagios Glance REST" i18n-name-key="nagios-glance.rest-res.name" key="nagios-glance-rest" path="/nagiosglance" version="1.0">
+    <description key="nagios-glance.rest-res.description">Nagios Glance REST Resources</description>
   </rest>
 
 </atlassian-plugin>

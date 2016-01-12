@@ -165,54 +165,6 @@
 												});
 
 												return html;
-
-												/*
-												var options = [
-													{
-														title : "__MSG_nagios-gadget.actions.viewserv__",
-														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
-													},
-													{
-														title : "__MSG_nagios-gadget.actions.viewhost__",
-														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
-													},
-													{
-														title : "__MSG_nagios-gadget.actions.acknowledge__",
-														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
-													},
-													{
-														title : "__MSG_nagios-gadget.actions.pinghost__",
-														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
-													},
-													{
-														title : "__MSG_nagios-gadget.actions.copyhost__",
-														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
-													},
-													{
-														title : "__MSG_nagios-gadget.actions.related__",
-														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
-													},
-													{
-														title : "__MSG_nagios-gadget.actions.create__",
-														key   : "/cgi-bin/nagios3/extinfo.cgi?type=1&host=" + this.host
-													}
-												];
-												
-
-												var html= AJS.$("<div class='aui-list' />");
-												var list = AJS.$("<ul />").appendTo(html);
-												
-												AJS.$(options).each(function() {
-													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
-													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
-														.attr("href", gadget.getBaseUrl() + this.key)
-														.text(this.title);
-													listItemNode.append(linkNode);
-													list.append(listItemNode);
-												});
-												
-												return html;
-												*/
 											}
 										}
                                 	});

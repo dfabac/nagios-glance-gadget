@@ -26,6 +26,11 @@ public class NagiosGlance {
 		ArrayList<NagiosAction> actions = new ArrayList<NagiosAction>();
 		actions.add(this.makeActionOpenSvc(host, svc));
 		actions.add(this.makeActionOpenHost(host));
+		actions.add(this.makeActionAckSrv(host, svc));
+		actions.add(this.makeActionPingHost(host));
+		actions.add(this.makeActionCopyHost(host));
+		actions.add(this.makeActionFindRelated(host));
+		actions.add(this.makeActionCreate(host, svc));
 
 		NagiosGlanceActionsModel ng = new NagiosGlanceActionsModel();
 		ng.setActions(actions);
@@ -33,14 +38,51 @@ public class NagiosGlance {
 		return Response.ok(ng).build();
 	}
 
+	// TODO
 	private NagiosAction makeActionOpenHost(String host)
 	{
-		return new NagiosAction("example", "example");
+		String path = "TO_BE_DETERMINED_?host=" + host;
+		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.viewhost"), path);
 	}
 
 	private NagiosAction makeActionOpenSvc(String host, String svc)
 	{
 		String path = "/cgi-bin/nagios3/extinfo.cgi?type=2&host=" + host + "&service=" + svc;
-		return new NagiosAction(i18n.getText("com.dfabac.pluginsjira.nagios-glance-gadget.actions.viewserv"), path);
+		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.viewserv"), path);
+	}
+
+	// TODO
+	private NagiosAction makeActionAckSrv(String host, String svc)
+	{
+		String path = "TO_BE_DETERMINED_?host=" + host + "&service=" + svc;
+		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.acknowledge"), path);
+	}
+
+	// TODO
+	private NagiosAction makeActionPingHost(String host)
+	{
+		String path = "TO_BE_DETERMINED_?host=" + host;
+		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.pinghost"), path);
+	}
+
+	// TODO
+	private NagiosAction makeActionCopyHost(String host)
+	{
+		String path = "TO_BE_DETERMINED_?host=" + host;
+		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.copyhost"), path);
+	}
+
+	// TODO
+	private NagiosAction makeActionFindRelated(String host)
+	{
+		String path = "TO_BE_DETERMINED_?host=" + host;
+		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.related"), path);
+	}
+
+	// TODO
+	private NagiosAction makeActionCreate(String host, String svc)
+	{
+		String path = "TO_BE_DETERMINED_?host=" + host;
+		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.create"), path);
 	}
 }
