@@ -6,6 +6,7 @@ import com.atlassian.sal.api.message.I18nResolver;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.util.ArrayList;
 
 
@@ -42,7 +43,7 @@ public class NagiosGlance {
 	private NagiosAction makeActionOpenHost(String host)
 	{
 		String path = "TO_BE_DETERMINED_?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.viewhost"), path);
+		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.viewhost"), path);
 	}
 
 	private NagiosAction makeActionOpenSvc(String host, String svc)
@@ -55,34 +56,34 @@ public class NagiosGlance {
 	private NagiosAction makeActionAckSrv(String host, String svc)
 	{
 		String path = "TO_BE_DETERMINED_?host=" + host + "&service=" + svc;
-		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.acknowledge"), path);
+		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.acknowledge"), path);
 	}
 
 	// TODO
 	private NagiosAction makeActionPingHost(String host)
 	{
 		String path = "TO_BE_DETERMINED_?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.pinghost"), path);
+		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.pinghost"), path);
 	}
 
 	// TODO
 	private NagiosAction makeActionCopyHost(String host)
 	{
 		String path = "TO_BE_DETERMINED_?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.copyhost"), path);
+		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.copyhost"), path);
 	}
 
 	// TODO
 	private NagiosAction makeActionFindRelated(String host)
 	{
 		String path = "TO_BE_DETERMINED_?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.related"), path);
+		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.related"), path);
 	}
 
 	// TODO
 	private NagiosAction makeActionCreate(String host, String svc)
 	{
 		String path = "TO_BE_DETERMINED_?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.create"), path);
+		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.create"), path);
 	}
 }
