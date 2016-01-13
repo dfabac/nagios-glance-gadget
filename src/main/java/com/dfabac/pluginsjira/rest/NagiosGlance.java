@@ -39,23 +39,21 @@ public class NagiosGlance {
 		return Response.ok(ng).build();
 	}
 
-	// TODO
 	private NagiosAction makeActionOpenHost(String host)
 	{
-		String path = "TO_BE_DETERMINED_?host=" + host;
+		String path = "/extinfo.cgi?type=1&host=" + host;
 		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.viewhost"), path);
 	}
 
 	private NagiosAction makeActionOpenSvc(String host, String svc)
 	{
-		String path = "/cgi-bin/nagios3/extinfo.cgi?type=2&host=" + host + "&service=" + svc;
+		String path = "/extinfo.cgi?type=2&host=" + host + "&service=" + svc;
 		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.viewserv"), path);
 	}
 
-	// TODO
 	private NagiosAction makeActionAckSrv(String host, String svc)
 	{
-		String path = "TO_BE_DETERMINED_?host=" + host + "&service=" + svc;
+		String path = "/cmd.cgi?cmd_typ=34&host=" + host + "&service=" + svc;
 		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.acknowledge"), path);
 	}
 
@@ -83,7 +81,7 @@ public class NagiosGlance {
 	// TODO
 	private NagiosAction makeActionCreate(String host, String svc)
 	{
-		String path = "TO_BE_DETERMINED_?host=" + host;
+		String path = "?host=" + host;
 		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.create"), path);
 	}
 }

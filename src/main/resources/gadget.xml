@@ -102,6 +102,8 @@
 										+ "?host="    + this.host 
 										+ "&service=" + this.service;
 
+									var nagioscgiurl = "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3";
+
 									container.append(
 										AJS.$("<tr/>").append(
 											AJS.$("<td/>").append(
@@ -109,15 +111,16 @@
 											),
 											AJS.$("<td/>").append(
 												AJS.$("<a/>").attr({
-													target: "_parent",
-													href: "__ATLASSIAN_BASE_URL__"
+													target: "_blank",
+													href: nagioscgiurl + '/extinfo.cgi?type=2&host=' + this.host 
+																+ "&service=" + this.service
 												}).text(this.host)
 											),
 											AJS.$("<td/>").append(  
 												AJS.$("<a/>").attr({
-													target: "_parent",
+													target: "_blank",
 													title: gadgets.util.escapeString(this.status_info),
-													href: "__ATLASSIAN_BASE_URL__"
+													href: nagioscgiurl + '/extinfo.cgi?type=1&host=' + this.host
 												}).text(this.service)
 											),
 											AJS.$("<td class='menu'/>").append(
@@ -153,13 +156,18 @@
 											cache: false,
 											formatSuccess: function (response) {
 
+												var nagioscgiurl = "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3";
+
 												var html= AJS.$("<div class='aui-list' />");
 												var list = AJS.$("<ul />").appendTo(html);
 
 												AJS.$(response.actions).each(function(){
 													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
 													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
-														.attr("href", gadget.getBaseUrl() + this.path).text(this.title);
+														.attr({
+															target: "_blank",
+															"href": nagioscgiurl + this.path
+														}).text(this.title);
 													listItemNode.append(linkNode);
 													list.append(listItemNode);
 												});
