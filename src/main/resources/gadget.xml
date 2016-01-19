@@ -158,17 +158,15 @@
 
 												var nagioscgiurl = "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3";
 
-												function renderListItem(url) {
+												function renderListItem(action, url) {
 													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
 													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
 														.attr({
 															target: "_blank",
-															"href": url
-														}).text(this.title);
+															"href": url + action.path
+														}).text(action.title);
 
-													if (this.class != "")
-														linkNode.addClass(this.class);
-
+													linkNode.addClass(action.cssClass);
 													listItemNode.append(linkNode);
 													list.append(listItemNode);
 												}
@@ -177,15 +175,15 @@
 												
 												// nagios menu actions
 												var list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
-												AJS.$(response.nagios_actions).each(renderListItem);
+												AJS.$(response.nagios_actions).each(function(){renderListItem(this, nagioscgiurl)});
 												
 												// jira menu actions
 												list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
-												AJS.$(response.jira_actions).each(renderListItem);
+												AJS.$(response.jira_actions).each(function(){renderListItem(this, "__ATLASSIAN_BASE_URL__")});
 												
 												// other menu actions
 												list = AJS.$("<ul class ='aui-list-section aui-last' />").appendTo(html);
-												AJS.$(response.other_actions).each(renderListItem);
+												AJS.$(response.other_actions).each(function(){renderListItem(this, "")});
 
 												return html;
 											}
