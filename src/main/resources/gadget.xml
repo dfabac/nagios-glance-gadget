@@ -158,19 +158,34 @@
 
 												var nagioscgiurl = "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3";
 
-												var html= AJS.$("<div class='aui-list' />");
-												var list = AJS.$("<ul />").appendTo(html);
-
-												AJS.$(response.actions).each(function(){
+												function renderListItem(url) {
 													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
 													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
 														.attr({
 															target: "_blank",
-															"href": nagioscgiurl + this.path
+															"href": url
 														}).text(this.title);
+
+													if (this.class != "")
+														linkNode.addClass(this.class);
+
 													listItemNode.append(linkNode);
 													list.append(listItemNode);
-												});
+												}
+
+												var html= AJS.$("<div class='aui-list' />");
+												
+												// nagios menu actions
+												var list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
+												AJS.$(response.nagios_actions).each(renderListItem);
+												
+												// jira menu actions
+												list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
+												AJS.$(response.jira_actions).each(renderListItem);
+												
+												// other menu actions
+												list = AJS.$("<ul class ='aui-list-section aui-last' />").appendTo(html);
+												AJS.$(response.other_actions).each(renderListItem);
 
 												return html;
 											}

@@ -24,64 +24,71 @@ public class NagiosGlance {
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getActions(@QueryParam("host") String host, @QueryParam("service") String svc)
 	{
-		ArrayList<NagiosAction> actions = new ArrayList<NagiosAction>();
-		actions.add(this.makeActionOpenSvc(host, svc));
-		actions.add(this.makeActionOpenHost(host));
-		actions.add(this.makeActionAckSrv(host, svc));
-		actions.add(this.makeActionPingHost(host));
-		actions.add(this.makeActionCopyHost(host));
-		actions.add(this.makeActionFindRelated(host));
-		actions.add(this.makeActionCreate(host, svc));
+		ArrayList<NagiosGlanceAction> na = new ArrayList<NagiosGlanceAction>();
+		na.add(this.makeActionOpenSvc(host, svc));
+		na.add(this.makeActionOpenHost(host));
+		na.add(this.makeActionAckSrv(host, svc));
+
+		ArrayList<NagiosGlanceAction> oa = new ArrayList<NagiosGlanceAction>();
+		oa.add(this.makeActionPingHost(host));
+		oa.add(this.makeActionCopyHost(host));
+		
+		ArrayList<NagiosGlanceAction> ja = new ArrayList<NagiosGlanceAction>();
+		ja.add(this.makeActionFindRelated(host));
+		ja.add(this.makeActionCreate(host, svc));
 
 		NagiosGlanceActionsModel ng = new NagiosGlanceActionsModel();
-		ng.setActions(actions);
+		ng.setNagiosActions(na);
+		ng.setJiraActions(ja);
+		ng.setOtherActions(oa);
 
 		return Response.ok(ng).build();
 	}
 
-	private NagiosAction makeActionOpenHost(String host)
+	private NagiosGlanceAction makeActionOpenHost(String host)
 	{
 		String path = "/extinfo.cgi?type=1&host=" + host;
-		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.viewhost"), path);
+		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.viewhost"), path);
 	}
 
-	private NagiosAction makeActionOpenSvc(String host, String svc)
+	private NagiosGlanceAction makeActionOpenSvc(String host, String svc)
 	{
 		String path = "/extinfo.cgi?type=2&host=" + host + "&service=" + svc;
-		return new NagiosAction(i18n.getText("nagios-glance.rest-res.actions.viewserv"), path);
+		return new NagiosGlanceAction(i18n.getText("nagios-glance.rest-res.actions.viewserv"), path);
 	}
 
-	private NagiosAction makeActionAckSrv(String host, String svc)
+	private NagiosGlanceAction makeActionAckSrv(String host, String svc)
 	{
 		String path = "/cmd.cgi?cmd_typ=34&host=" + host + "&service=" + svc;
-		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.acknowledge"), path);
+		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.acknowledge"), path);
 	}
 
 	// TODO
-	private NagiosAction makeActionPingHost(String host)
+	private NagiosGlanceAction makeActionPingHost(String host)
 	{
 		String path = "TO_BE_DETERMINED_?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.pinghost"), path);
+		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.pinghost"), path);
 	}
 
 	// TODO
-	private NagiosAction makeActionCopyHost(String host)
+	private NagiosGlanceAction makeActionCopyHost(String host)
 	{
 		String path = "TO_BE_DETERMINED_?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.copyhost"), path);
+		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.copyhost"), path);
 	}
 
-	// TODO
-	private NagiosAction makeActionFindRelated(String host)
+	// TODO - falta parametros
+	private NagiosGlanceAction makeActionFindRelated(String host)
 	{
-		String path = "TO_BE_DETERMINED_?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.related"), path);
+		String path = "/browse/TEST-1?jql=";
+		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.related"), path);
 	}
 
-	// TODO
-	private NagiosAction makeActionCreate(String host, String svc)
+	// TODO -falta parametros
+	private NagiosGlanceAction makeActionCreate(String host, String svc)
 	{
-		String path = "?host=" + host;
-		return new NagiosAction(i18n.getText("nagios-gadget.rest-res.actions.create"), path);
+		String path = "/secure/CreateIssue!default.jspa";
+		String cssClass = "create-issue";
+		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.create"), path, cssClass);
 	}
 }
