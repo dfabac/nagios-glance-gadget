@@ -23,7 +23,10 @@
 
 	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
-	<UserPref name="problemsURL" datatype="hidden" default_value="http://monitoriza.irtve.rtve.int/wsnagios/problems" />
+	<UserPref name="problemsURL" datatype="string" default_value="http://monitoriza.irtve.rtve.int/wsnagios/problems" />
+	<UserPref name="nagiosCgiURL" datatype="string" default_value="http://monitoriza.irtve.rtve.int/cgi-bin/nagios3" />
+	<UserPref name="jiraProjectId" datatype="string" default_value="10000" />
+	<UserPref name="jiraIssueTypeId" datatype="string" default_value="10000" />
 
 	<Content type="html">
 		<![CDATA[
@@ -82,6 +85,27 @@
 										type: 'text',
 										value: this.getPref('problemsURL')
 									},
+									{
+										userpref: 'nagiosCgiURL',
+										label: "__MSG_nagios-gadget.config.cgilabel__",
+										description: "__MSG_nagios-gadget.config.cgidesc__",
+										type: 'text',
+										value: this.getPref('nagiosCgiURL')
+									},
+									{
+										userpref: 'jiraProjectId',
+										label: "__MSG_nagios-gadget.config.projectlabel__",
+										description: "__MSG_nagios-gadget.config.projectdesc__",
+										type: 'text',
+										value: this.getPref('jiraProjectId')
+									},
+									{
+										userpref: 'jiraIssueTypeId',
+										label: "__MSG_nagios-gadget.config.issuetypelabel__",
+										description: "__MSG_nagios-gadget.config.issuetypedesc__",
+										type: 'text',
+										value: this.getPref('jiraIssueTypeId')
+									},
 									AJS.gadget.fields.nowConfigured()
 								]
 							};
@@ -94,15 +118,17 @@
 
 							var gadget = this;
 
-							function populate(data, stylename, container) {
+							function populate(data, stylename, container, gadget) {
 								 AJS.$(data).each(function() {
 
 		 							var actionsurl = gadget.getBaseUrl() 
 										+ "/rest/nagiosglance/latest/actions"
-										+ "?host="    + this.host 
-										+ "&service=" + this.service;
+										+ "?host="      + this.host 
+										+ "&service="   + this.service
+										+ "&project="   + gadget.getPref('jiraProjectId')
+										+ "&issuetype=" + gadget.getPref('jiraIssueTypeId');
 
-									var nagioscgiurl = "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3";
+									var nagioscgiurl = gadget.getPref('nagiosCgiURL');
 
 									container.append(
 										AJS.$("<tr/>").append(
@@ -156,7 +182,8 @@
 											cache: false,
 											formatSuccess: function (response) {
 
-												var nagioscgiurl = "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3";
+												//var nagioscgiurl = "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3";
+												var nagioscgiurl = gadget.getPref('nagiosCgiURL');
 
 												function renderListItem(action, url) {
 													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
@@ -166,7 +193,7 @@
 															"href": url + action.path
 														}).text(action.title);
 
-													linkNode.addClass(action.cssClass);
+													linkNode.addClass(action.cssClass);;
 													listItemNode.append(linkNode);
 													list.append(listItemNode);
 												}
@@ -198,8 +225,8 @@
 
                             var serviceList = AJS.$("<table/>");
 
-							populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
-							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
+							populate(args.dataProblems.problems.critical.items, 'critical', serviceList, gadget);
+							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList, gadget);
 
 							summary = AJS.$("<div/>").append(
 								AJS.$("<span/>").append(

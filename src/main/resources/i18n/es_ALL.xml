@@ -3,4 +3,10 @@
 	<msg name="nagios-gadget.description">Gadget Nagios Glance para JIRA Dashboard</msg>
 	<msg name="nagios-gadget.config.urllabel">JSON URL</msg>
 	<msg name="nagios-gadget.config.urldesc">URL de WSNagios problems</msg>
+	<msg name="nagios-gadget.config.cgilabel">CGI URL</msg>
+	<msg name="nagios-gadget.config.cgidesc">Url de CGIs de Nagios</msg>
+	<msg name="nagios-gadget.config.projectlabel">Proyecto JIRA</msg>
+	<msg name="nagios-gadget.config.projectdesc">Para preselección en creación y búsquedas</msg>
+	<msg name="nagios-gadget.config.issuetypelabel">Tipo de incidencia</msg>
+	<msg name="nagios-gadget.config.issuetypedesc">Para preselección en creación y búsquedas</msg>
 </messagebundle>

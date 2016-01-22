@@ -22,7 +22,8 @@ public class NagiosGlance {
 	@GET
 	@AnonymousAllowed
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getActions(@QueryParam("host") String host, @QueryParam("service") String svc)
+	public Response getActions(@QueryParam("host") String host, @QueryParam("service") String svc, 
+							@QueryParam("project") String projectId, @QueryParam("issuetype") String issueTypeId)
 	{
 		ArrayList<NagiosGlanceAction> na = new ArrayList<NagiosGlanceAction>();
 		na.add(this.makeActionOpenSvc(host, svc));
@@ -34,8 +35,8 @@ public class NagiosGlance {
 		oa.add(this.makeActionCopyHost(host));
 		
 		ArrayList<NagiosGlanceAction> ja = new ArrayList<NagiosGlanceAction>();
-		ja.add(this.makeActionFindRelated(host));
-		ja.add(this.makeActionCreate(host, svc));
+		ja.add(this.makeActionFindRelated(host, projectId));
+		ja.add(this.makeActionCreate(host, svc, projectId, issueTypeId));
 
 		NagiosGlanceActionsModel ng = new NagiosGlanceActionsModel();
 		ng.setNagiosActions(na);
@@ -77,17 +78,16 @@ public class NagiosGlance {
 		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.copyhost"), path);
 	}
 
-	// TODO - falta parametros
-	private NagiosGlanceAction makeActionFindRelated(String host)
+	private NagiosGlanceAction makeActionFindRelated(String host, String projectId)
 	{
-		String path = "/browse/TEST-1?jql=";
+		String jql  = "project %3D " + projectId + " AND created >%3D -60m AND text ~ " + host;
+		String path = "/issues/?jql=" + jql;
 		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.related"), path);
 	}
 
-	// TODO -falta parametros
-	private NagiosGlanceAction makeActionCreate(String host, String svc)
+	private NagiosGlanceAction makeActionCreate(String host, String svc, String projectId, String issueTypeId)
 	{
-		String path = "/secure/CreateIssue!default.jspa";
+		String path = "/secure/CreateIssue!default.jspa?pid=" + projectId + "&issuetype=" + issueTypeId;
 		String cssClass = "create-issue";
 		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.create"), path, cssClass);
 	}
