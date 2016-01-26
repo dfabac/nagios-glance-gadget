@@ -36,8 +36,9 @@
 		#includeResources()
 
 		<style type="text/css">
+
 			div span { 
-				margin-left : 5px; 
+				margin-left : 5px;
 			}
 			table {
 				width   : 100%;
@@ -228,17 +229,21 @@
 							populate(args.dataProblems.problems.critical.items, 'critical', serviceList, gadget);
 							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList, gadget);
 
-							summary = AJS.$("<div/>").append(
+							summary = AJS.$("<div/>").addClass("summary").append(
 								AJS.$("<span/>").append(
 									"c: " + args.dataProblems.problems.critical.total
 								),
 								AJS.$("<span/>").append(
 									"w: " + args.dataProblems.problems.warning.total
+								),
+								AJS.$("<span/>").append(
+									"(" + args.dataProblems.totalServices + " __MSG_nagios-gadget.footer__ " 
+									+ args.dataProblems.totalHosts + " hosts)"
 								)
 							);
 
 							this.getView().html(serviceList);
-                            this.getView().append(summary);
+							gadget.getFooter().append(summary);
 
                             gadget.hideLoading();
                         },
