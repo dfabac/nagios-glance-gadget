@@ -183,7 +183,6 @@
 											cache: false,
 											formatSuccess: function (response) {
 
-												//var nagioscgiurl = "http://monitoriza.irtve.rtve.int/cgi-bin/nagios3";
 												var nagioscgiurl = gadget.getPref('nagiosCgiURL');
 
 												function renderListItem(action, url) {
@@ -242,22 +241,22 @@
 								)
 							);
 
-							this.getView().html(serviceList);
+							gadget.getView().html(serviceList);
 							gadget.getFooter().append(summary);
 
-                            gadget.hideLoading();
-                        },
-                        args: [{
-                            key: "dataProblems",
-                            ajaxOptions: function() {
-                                return {
-                                    url: this.getPref('problemsURL')
-                                };
-                            }
-                        }]
-                    }
-                });
-            })();
+							gadget.hideLoading();
+						},
+						args: [{
+							key: "dataProblems",
+							ajaxOptions: function() {
+								return {
+									url: this.getPref('problemsURL')
+								};
+							}
+						}]
+					}
+				});
+			})();
 		</script>
 
 	]]></Content>
