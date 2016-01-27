@@ -252,8 +252,22 @@
 								)
 							);
 
+							refreshBtn = AJS.$("<a/>").addClass("lnk aui-dd-link").attr({
+								href  : "#",
+								title : "__MSG_nagios-gadget.resfreshbutton__"
+							}).append(
+								AJS.$("<span/>").addClass("aui-icon aui-icon-small aui-iconfont-build")
+								).click(function() {
+									gadget.showView(true);
+									setTimeout(function() {
+										gadget.resize();
+								}, 500);
+							});
+
 							gadget.getView().html(serviceList);
 							gadget.getFooter().html(summary);
+							gadget.getFooter().append("__MSG_nagios-gadget.lastupdated__ " + (Date.now() / 1000 | 0));
+							gadget.getFooter().append(refreshBtn);
 
 							gadget.hideLoading();
 						},
