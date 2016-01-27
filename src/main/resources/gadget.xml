@@ -10,6 +10,7 @@
 			<Param name="categories">Other</Param>
 		</Optional>
 		<Optional feature="atlassian.util" />
+		<Optional feature='auth-refresh' />
 		<Require feature="dynamic-height" />
 		<Require feature="settitle" />
 		<Require feature="oauthpopup" />
@@ -27,6 +28,7 @@
 	<UserPref name="nagiosCgiURL" datatype="string" default_value="http://monitoriza.irtve.rtve.int/cgi-bin/nagios3" />
 	<UserPref name="jiraProjectId" datatype="string" default_value="10000" />
 	<UserPref name="jiraIssueTypeId" datatype="string" default_value="10000" />
+	<UserPref name="erase-footer-callback" datatype="hidden" default_value="" />
 
 	<Content type="html">
 		<![CDATA[
@@ -77,6 +79,7 @@
                     useOauth: "/rest/gadget/1.0/currentUser",
 					config: {
                         descriptor: function (args) {
+							var gadget = this;
 							return {
                                 fields: [
 									{
@@ -106,6 +109,14 @@
 										description: "__MSG_nagios-gadget.config.issuetypedesc__",
 										type: 'text',
 										value: this.getPref('jiraIssueTypeId')
+									},
+									{
+										id: "callback-field",
+										type: "callbackBuilder",
+										userpref: "erase-footer-callback",
+										callback: function(parentDiv){
+											gadget.getFooter().html("");
+										}
 									},
 									AJS.gadget.fields.nowConfigured()
 								]
@@ -242,7 +253,7 @@
 							);
 
 							gadget.getView().html(serviceList);
-							gadget.getFooter().append(summary);
+							gadget.getFooter().html(summary);
 
 							gadget.hideLoading();
 						},
