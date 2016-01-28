@@ -4,6 +4,7 @@
 	<msg name="nagios-gadget.footer">services on</msg>
 	<msg name="nagios-gadget.resfreshbutton">Update now</msg>
 	<msg name="nagios-gadget.lastupdated">Last update:</msg>
+	<msg name="nagios-gadget.lastupdated.dateformat">dd/MMM HH:mm:ss</msg>
 	<msg name="nagios-gadget.config.urllabel">JSON URL</msg>
 	<msg name="nagios-gadget.config.urldesc">WSNagios problems URL</msg>
 	<msg name="nagios-gadget.config.cgilabel">CGI URL</msg>

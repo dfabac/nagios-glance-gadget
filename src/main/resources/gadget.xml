@@ -35,6 +35,7 @@
 		#requireResource("com.atlassian.auiplugin:ajs")
 		#requireContext("com.atlassian.jira.gadgets:common-lite")
 		#requireResource("jira.webresources:dropdown")
+#requireResource("jira.webresources:jquery-livestamp")
 		#includeResources()
 
 		<style type="text/css">
@@ -264,9 +265,12 @@
 								}, 500);
 							});
 
+							var m = moment(new Date());
+							var dateString = m.format(JIRA.translateSimpleDateFormat("__MSG_nagios-gadget.lastupdated.dateformat__"));
+
 							gadget.getView().html(serviceList);
 							gadget.getFooter().html(summary);
-							gadget.getFooter().append("__MSG_nagios-gadget.lastupdated__ " + (Date.now() / 1000 | 0));
+							gadget.getFooter().append("__MSG_nagios-gadget.lastupdated__ " + dateString);
 							gadget.getFooter().append(refreshBtn);
 
 							gadget.hideLoading();
