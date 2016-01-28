@@ -40,14 +40,17 @@
 
 		<style type="text/css">
 
+			div {
+				background-color : #f5f5f5;
+			}
 			div span { 
 				margin-left : 5px;
 			}
-			#footer-left {
-				float : left;
+			span.footer-left {
+				float   : left;
 			}
-			#footer-right {
-				float : right;
+			span.footer-right {
+				float   : right;
 			}
 			table {
 				width   : 100%;
@@ -55,12 +58,12 @@
 			tr {
 				height  : 20px;
 			}
-			tr.critical {
+			tr.critical, span.critical {
 				border-right  : 1px solid #E83535;
 				border-bottom : 1px solid #E83535;
 				background    : #ff9b9b;
 			}
-			tr.warning  {
+			tr.warning, span.warning {
 				border-right  : 1px solid #F7F700;
 				border-bottom : 1px solid #F7F700;
 				background    : #FCFCAC;
@@ -262,11 +265,11 @@
 								}
 							);
 	
-							var summary = AJS.$("<div/>").addClass("footer-left").append(
-								AJS.$("<span/>").addClass("footer-left").append(
+							var summary = AJS.$("<span/>").addClass("footer-left").append(
+								AJS.$("<span/>").addClass("critical").append(
 									"c: " + args.dataProblems.problems.critical.total
 								),
-								AJS.$("<span/>").append(
+								AJS.$("<span/>").addClass("warning").append(
 									"w: " + args.dataProblems.problems.warning.total
 								),
 								AJS.$("<span/>").append(
@@ -275,7 +278,7 @@
 								)
 							);
 
-							var lastUpdated = AJS.$("<div/>").addClass("footer-right").append(
+							var lastUpdated = AJS.$("<span/>").addClass("footer-right").append(
 								AJS.$("<span/>").append(
 									"__MSG_nagios-gadget.lastupdated__ " + dateString
 								),
