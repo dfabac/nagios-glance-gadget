@@ -35,13 +35,19 @@
 		#requireResource("com.atlassian.auiplugin:ajs")
 		#requireContext("com.atlassian.jira.gadgets:common-lite")
 		#requireResource("jira.webresources:dropdown")
-#requireResource("jira.webresources:jquery-livestamp")
+		#requireResource("jira.webresources:jquery-livestamp")
 		#includeResources()
 
 		<style type="text/css">
 
 			div span { 
 				margin-left : 5px;
+			}
+			#footer-left {
+				float : left;
+			}
+			#footer-right {
+				float : right;
 			}
 			table {
 				width   : 100%;
@@ -80,7 +86,9 @@
                     useOauth: "/rest/gadget/1.0/currentUser",
 					config: {
                         descriptor: function (args) {
+
 							var gadget = this;
+
 							return {
                                 fields: [
 									{
@@ -131,7 +139,7 @@
 
 							var gadget = this;
 
-							function populate(data, stylename, container, gadget) {
+							function populate(data, stylename, container) {
 								 AJS.$(data).each(function() {
 
 		 							var actionsurl = gadget.getBaseUrl() 
@@ -233,15 +241,29 @@
 								}
 							});
 
-							gadget.showLoading();
+							var m = moment(new Date());
 
-                            var serviceList = AJS.$("<table/>");
+							var dateString = m.format(JIRA.translateSimpleDateFormat("__MSG_nagios-gadget.lastupdated.dateformat__"));
 
-							populate(args.dataProblems.problems.critical.items, 'critical', serviceList, gadget);
-							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList, gadget);
+							var refreshBtn = AJS.$("<a/>").addClass("lnk").attr({
+								href  : "#",
+								title : "__MSG_nagios-gadget.resfreshbutton__"
+							}).append(
+								AJS.$("<span/>").addClass("aui-icon aui-icon-small aui-iconfont-build")
+								).click(function(e) {
 
-							summary = AJS.$("<div/>").addClass("summary").append(
-								AJS.$("<span/>").append(
+									e.preventDefault();
+									e.stopPropagation();
+
+									gadget.showView(true);
+									setTimeout(function() {
+										gadget.resize();
+									}, 500);
+								}
+							);
+	
+							var summary = AJS.$("<div/>").addClass("footer-left").append(
+								AJS.$("<span/>").addClass("footer-left").append(
 									"c: " + args.dataProblems.problems.critical.total
 								),
 								AJS.$("<span/>").append(
@@ -253,25 +275,25 @@
 								)
 							);
 
-							refreshBtn = AJS.$("<a/>").addClass("lnk aui-dd-link").attr({
-								href  : "#",
-								title : "__MSG_nagios-gadget.resfreshbutton__"
-							}).append(
-								AJS.$("<span/>").addClass("aui-icon aui-icon-small aui-iconfont-build")
-								).click(function() {
-									gadget.showView(true);
-									setTimeout(function() {
-										gadget.resize();
-								}, 500);
-							});
+							var lastUpdated = AJS.$("<div/>").addClass("footer-right").append(
+								AJS.$("<span/>").append(
+									"__MSG_nagios-gadget.lastupdated__ " + dateString
+								),
+								AJS.$("<span/>").append(
+									refreshBtn
+								)
+							);
 
-							var m = moment(new Date());
-							var dateString = m.format(JIRA.translateSimpleDateFormat("__MSG_nagios-gadget.lastupdated.dateformat__"));
+							gadget.showLoading();
+
+							var serviceList = AJS.$("<table/>");
+
+							populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
+							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
 
 							gadget.getView().html(serviceList);
 							gadget.getFooter().html(summary);
-							gadget.getFooter().append("__MSG_nagios-gadget.lastupdated__ " + dateString);
-							gadget.getFooter().append(refreshBtn);
+							gadget.getFooter().append(lastUpdated);
 
 							gadget.hideLoading();
 						},
