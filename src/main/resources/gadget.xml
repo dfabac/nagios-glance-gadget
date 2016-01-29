@@ -162,15 +162,15 @@
 											AJS.$("<td/>").append(
 												AJS.$("<a/>").attr({
 													target: "_blank",
-													href: nagioscgiurl + '/extinfo.cgi?type=2&host=' + this.host 
-																+ "&service=" + this.service
+													href: nagioscgiurl + '/extinfo.cgi?type=1&host=' + this.host
 												}).text(this.host)
 											),
 											AJS.$("<td/>").append(  
 												AJS.$("<a/>").attr({
 													target: "_blank",
 													title: gadgets.util.escapeString(this.status_info),
-													href: nagioscgiurl + '/extinfo.cgi?type=1&host=' + this.host
+													href: nagioscgiurl + '/extinfo.cgi?type=2&host=' + this.host
+																+ "&service=" + this.service
 												}).text(this.service)
 											),
 											AJS.$("<td class='menu'/>").append(
@@ -291,10 +291,15 @@
 
 							var serviceList = AJS.$("<table/>");
 
-							populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
-							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
+							if (args.dataProblems.problems.totalProblems == 0) 
+							{
+								gadget.getView().html("OK");
+							} else {
+								populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
+								populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
+								gadget.getView().html(serviceList);
+							}
 
-							gadget.getView().html(serviceList);
 							gadget.getFooter().html(summary);
 							gadget.getFooter().append(lastUpdated);
 
