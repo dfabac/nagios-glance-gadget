@@ -52,6 +52,18 @@
 			span.footer-right {
 				float   : right;
 			}
+			div.all-ok-div {
+				height         : 100px;
+				display        : flex;
+				align-items    : center;
+				vertical-align : middle;  
+			}
+			span.ok-tick-span {
+				color     : green;
+				font-size : 60px;
+				min-width : 60px;
+				margin-left : 30px;
+			}
 			table {
 				width   : 100%;
 			}
@@ -291,9 +303,15 @@
 
 							var serviceList = AJS.$("<table/>");
 
-							if (args.dataProblems.problems.totalProblems == 0) 
+							if (args.dataProblems.problems.totalProblems == 0)
 							{
-								gadget.getView().html("OK");
+								var ok = AJS.$("<div/>").addClass("all-ok-div").append(
+									AJS.$("<span/>").addClass("ok-tick-span")
+										.append("&#10003;"),
+									AJS.$("<span/>")
+										.append("__MSG_nagios-gadget.allservicesok__")
+								);
+								gadget.getView().html(ok);
 							} else {
 								populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
 								populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
