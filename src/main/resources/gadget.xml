@@ -26,7 +26,7 @@
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
 	<UserPref name="problemsURL" datatype="string" default_value="http://monitoriza.irtve.rtve.int/wsnagios/problems" />
 	<UserPref name="nagiosCgiURL" datatype="string" default_value="http://monitoriza.irtve.rtve.int/cgi-bin/nagios3" />
-	<UserPref name="jiraProjectId" datatype="string" default_value="10000" />
+	<UserPref name="jiraProjectId" datatype="hidden" />
 	<UserPref name="jiraIssueTypeId" datatype="string" default_value="10000" />
 	<UserPref name="erase-footer-callback" datatype="hidden" default_value="" />
 
@@ -108,13 +108,14 @@
 										type: 'text',
 										value: this.getPref('nagiosCgiURL')
 									},
-									{
-										userpref: 'jiraProjectId',
-										label: "__MSG_nagios-gadget.config.projectlabel__",
-										description: "__MSG_nagios-gadget.config.projectdesc__",
-										type: 'text',
-										value: this.getPref('jiraProjectId')
-									},
+									AJS.$.extend(
+										true, 
+										{}, 
+										AJS.gadget.fields.projectPicker(gadget, "jiraProjectId", args.projectPickerOptions),
+										{
+											description: "__MSG_nagios-gadget.config.projectdesc__"
+										}
+									),
 									{
 										userpref: 'jiraIssueTypeId',
 										label: "__MSG_nagios-gadget.config.issuetypelabel__",
@@ -134,7 +135,12 @@
 								]
 							};
 						},
-						args: []
+						args: [
+							{
+								key: "projectPickerOptions",
+								ajaxOptions: "/rest/gadget/1.0/filtersAndProjects?showFilters=false"
+							}
+						]
 					},
 					view: {
 						enableReload: true,
