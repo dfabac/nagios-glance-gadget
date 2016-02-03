@@ -214,15 +214,20 @@
 
 												var nagioscgiurl = gadget.getPref('nagiosCgiURL');
 
-												function renderListItem(action, url) {
+												function renderListItem(action, url, disabled) {
 													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
 													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
-														.attr({
-															target: "_blank",
-															"href": url + action.path
-														}).text(action.title);
+														.text(action.title);
 
-													linkNode.addClass(action.cssClass);;
+													if (disabled) {
+														linkNode.addClass("disabled");
+													} else {
+														linkNode.attr({
+															target : "_blank",
+															href   : url + action.path
+														});
+														linkNode.addClass(action.cssClass);
+													}
 													listItemNode.append(linkNode);
 													list.append(listItemNode);
 												}
@@ -231,15 +236,15 @@
 												
 												// nagios menu actions
 												var list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
-												AJS.$(response.nagios_actions).each(function(){renderListItem(this, nagioscgiurl)});
+												AJS.$(response.nagios_actions).each(function(){renderListItem(this, nagioscgiurl, false)});
 												
 												// jira menu actions
 												list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
-												AJS.$(response.jira_actions).each(function(){renderListItem(this, "__ATLASSIAN_BASE_URL__")});
+												AJS.$(response.jira_actions).each(function(){renderListItem(this, "__ATLASSIAN_BASE_URL__", true)});
 												
 												// other menu actions
 												list = AJS.$("<ul class ='aui-list-section aui-last' />").appendTo(html);
-												AJS.$(response.other_actions).each(function(){renderListItem(this, "")});
+												AJS.$(response.other_actions).each(function(){renderListItem(this, "", false)});
 
 												return html;
 											}
