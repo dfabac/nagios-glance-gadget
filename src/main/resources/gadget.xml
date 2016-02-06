@@ -33,7 +33,7 @@
 	<Content type="html">
 		<![CDATA[
 		#requireResource("com.atlassian.auiplugin:ajs")
-		#requireContext("com.atlassian.jira.gadgets:common-lite")
+		#requireResource("com.atlassian.gadgets.publisher:ajs-gadgets")
 		#requireResource("jira.webresources:dropdown")
 		#requireResource("jira.webresources:jquery-livestamp")
 		#includeResources()
