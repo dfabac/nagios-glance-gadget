@@ -35,6 +35,7 @@
 		#requireContext("com.atlassian.jira.gadgets:autocomplete")
 		#requireResource("jira.webresources:dropdown")
 		#requireResource("jira.webresources:jquery-livestamp")
+		#requireResource("com.atlassian.auiplugin:aui-experimental-tooltips")
 		#includeResources()
 
 		<style type="text/css">
@@ -236,6 +237,9 @@
 													if (disabled) {
 														linkNode.addClass("disabled");
 														linkNode.click(showMessageDisabled);
+														linkNode.addClass("disabled-tooltip").attr({
+															title: "__MSG_nagios-gadget.disabled.tooltip__"
+														});
 													} else {
 														linkNode.attr({
 															target : "_blank",
@@ -251,6 +255,9 @@
 												
 												var disableJiraActions = true;
 												if (gadget.getPref("jiraProjectId")) disableJiraActions = false;
+
+												// bind AUI tooltips
+												AJS.$(".disabled-tooltip").tooltip();
 
 												// nagios menu actions
 												var list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);

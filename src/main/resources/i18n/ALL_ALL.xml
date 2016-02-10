@@ -8,6 +8,7 @@
 	<msg name="nagios-gadget.disabled.message.title">Disabled action</msg>
 	<msg name="nagios-gadget.disabled.message.body">In order to use this, please set project and issue type in</msg>
 	<msg name="nagios-gadget.disabled.message.config">settings</msg>
+	<msg name="nagios-gadget.disabled.tooltip">Disabled action. Review the gadget settings.</msg>
 	<msg name="nagios-gadget.config.urllabel">JSON URL</msg>
 	<msg name="nagios-gadget.config.urldesc">WSNagios problems URL</msg>
 	<msg name="nagios-gadget.config.cgilabel">CGI URL</msg>
