@@ -5,6 +5,9 @@
 	<msg name="nagios-gadget.resfreshbutton">Update now</msg>
 	<msg name="nagios-gadget.lastupdated">Last update:</msg>
 	<msg name="nagios-gadget.lastupdated.dateformat">dd/MMM HH:mm:ss</msg>
+	<msg name="nagios-gadget.disabled.message.title">Disabled action</msg>
+	<msg name="nagios-gadget.disabled.message.body">In order to use this, please set project and issue type in</msg>
+	<msg name="nagios-gadget.disabled.message.config">settings</msg>
 	<msg name="nagios-gadget.config.urllabel">JSON URL</msg>
 	<msg name="nagios-gadget.config.urldesc">WSNagios problems URL</msg>
 	<msg name="nagios-gadget.config.cgilabel">CGI URL</msg>

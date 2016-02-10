@@ -32,8 +32,7 @@
 
 	<Content type="html">
 		<![CDATA[
-		#requireResource("com.atlassian.auiplugin:ajs")
-		#requireContext("com.atlassian.jira.gadgets:common-lite")
+		#requireContext("com.atlassian.jira.gadgets:autocomplete")
 		#requireResource("jira.webresources:dropdown")
 		#requireResource("jira.webresources:jquery-livestamp")
 		#includeResources()
@@ -76,6 +75,9 @@
 			}
 			table tr:hover td a span.aui-icon { 
 				display : inline-block;
+			}
+			div .aui-message {
+				margin: 10px;
 			}
 		</style>
 
@@ -168,15 +170,15 @@
 											AJS.$("<td/>").append(
 												AJS.$("<a/>").attr({
 													target: "_blank",
-													href: nagioscgiurl + '/extinfo.cgi?type=2&host=' + this.host 
-																+ "&service=" + this.service
+													href: nagioscgiurl + '/extinfo.cgi?type=1&host=' + this.host
 												}).text(this.host)
 											),
 											AJS.$("<td/>").append(  
 												AJS.$("<a/>").attr({
 													target: "_blank",
 													title: gadgets.util.escapeString(this.status_info),
-													href: nagioscgiurl + '/extinfo.cgi?type=1&host=' + this.host
+													href: nagioscgiurl + '/extinfo.cgi?type=2&host=' + this.host 
+															+ "&service=" + this.service
 												}).text(this.service)
 											),
 											AJS.$("<td class='menu'/>").append(
@@ -214,6 +216,18 @@
 
 												var nagioscgiurl = gadget.getPref('nagiosCgiURL');
 
+												function showMessageDisabled(){
+													AJS.messages.warning({
+														title: '__MSG_nagios-gadget.disabled.message.title__',
+														body: '<p>__MSG_nagios-gadget.disabled.message.body__ ' +
+															'<a class="a-config">__MSG_nagios-gadget.disabled.message.config__<a></p>'
+													});
+													AJS.$(document).on("aui-message-close", function (e,a) {
+														gadgets.window.adjustHeight();
+													});
+													gadgets.window.adjustHeight();
+												}
+
 												function renderListItem(action, url, disabled) {
 													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
 													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
@@ -221,6 +235,7 @@
 
 													if (disabled) {
 														linkNode.addClass("disabled");
+														linkNode.click(showMessageDisabled);
 													} else {
 														linkNode.attr({
 															target : "_blank",
@@ -234,13 +249,16 @@
 
 												var html= AJS.$("<div class='aui-list' />");
 												
+												var disableJiraActions = true;
+												if (gadget.getPref("jiraProjectId")) disableJiraActions = false;
+
 												// nagios menu actions
 												var list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
 												AJS.$(response.nagios_actions).each(function(){renderListItem(this, nagioscgiurl, false)});
 												
 												// jira menu actions
 												list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
-												AJS.$(response.jira_actions).each(function(){renderListItem(this, "__ATLASSIAN_BASE_URL__", true)});
+												AJS.$(response.jira_actions).each(function(){renderListItem(this, "__ATLASSIAN_BASE_URL__", disableJiraActions)});
 												
 												// other menu actions
 												list = AJS.$("<ul class ='aui-list-section aui-last' />").appendTo(html);
@@ -249,10 +267,17 @@
 												return html;
 											}
 										}
-                                	});
+									});
 
 									$this.click();
 								}
+							});
+
+
+							AJS.$(document.body).delegate("a.a-config", "click", function (e) {
+								e.preventDefault();
+								e.stopPropagation();
+								gadget.showConfig();
 							});
 
 							var m = moment(new Date());
@@ -300,12 +325,14 @@
 
 							gadget.showLoading();
 
+							var messageHolder = AJS.$("<div/>").attr({id: "aui-message-bar"});
 							var serviceList = AJS.$("<table/>");
 
 							populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
 							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
 
-							gadget.getView().html(serviceList);
+							gadget.getView().html(messageHolder);
+							gadget.getView().append(serviceList);
 							gadget.getFooter().html(summary);
 							gadget.getFooter().append(lastUpdated);
 

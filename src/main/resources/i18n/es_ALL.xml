@@ -5,6 +5,9 @@
 	<msg name="nagios-gadget.resfreshbutton">Actualizar ahora</msg>
 	<msg name="nagios-gadget.lastupdated">Última actualización:</msg>
 	<msg name="nagios-gadget.lastupdated.dateformat">dd/MMM HH:mm:ss</msg>
+	<msg name="nagios-gadget.disabled.message.title">Acción deshabilitada</msg>
+	<msg name="nagios-gadget.disabled.message.body">Para usar esta acción, establezca un proyecto y tipo de incidencia en la</msg>
+	<msg name="nagios-gadget.disabled.message.config">configuración</msg>
 	<msg name="nagios-gadget.config.urllabel">JSON URL</msg>
 	<msg name="nagios-gadget.config.urldesc">URL de WSNagios problems</msg>
 	<msg name="nagios-gadget.config.cgilabel">CGI URL</msg>
