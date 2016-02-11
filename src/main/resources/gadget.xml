@@ -350,10 +350,10 @@
 							} else {
 								populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
 								populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
-								gadget.getView().html(serviceList);
+								gadget.getView().html(messageHolder);
+								gadget.getView().append(serviceList);
 							}
 
-							gadget.getView().html(messageHolder);
 							gadget.getFooter().html(summary);
 							gadget.getFooter().append(lastUpdated);
 
