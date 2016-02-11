@@ -26,7 +26,7 @@
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
 	<UserPref name="problemsURL" datatype="string" default_value="http://monitoriza.irtve.rtve.int/wsnagios/problems" />
 	<UserPref name="nagiosCgiURL" datatype="string" default_value="http://monitoriza.irtve.rtve.int/cgi-bin/nagios3" />
-	<UserPref name="jiraProjectId" datatype="string" default_value="10000" />
+	<UserPref name="jiraProjectId" datatype="hidden" />
 	<UserPref name="jiraIssueTypeId" datatype="string" default_value="10000" />
 	<UserPref name="erase-footer-callback" datatype="hidden" default_value="" />
 
@@ -35,6 +35,7 @@
 		#requireContext("com.atlassian.jira.gadgets:autocomplete")
 		#requireResource("jira.webresources:dropdown")
 		#requireResource("jira.webresources:jquery-livestamp")
+		#requireResource("com.atlassian.auiplugin:aui-experimental-tooltips")
 		#includeResources()
 
 		<style type="text/css">
@@ -76,6 +77,9 @@
 			table tr:hover td a span.aui-icon { 
 				display : inline-block;
 			}
+			div .aui-message {
+				margin: 10px;
+			}
 		</style>
 
 		<script type="text/javascript">
@@ -107,13 +111,14 @@
 										type: 'text',
 										value: this.getPref('nagiosCgiURL')
 									},
-									{
-										userpref: 'jiraProjectId',
-										label: "__MSG_nagios-gadget.config.projectlabel__",
-										description: "__MSG_nagios-gadget.config.projectdesc__",
-										type: 'text',
-										value: this.getPref('jiraProjectId')
-									},
+									AJS.$.extend(
+										true, 
+										{}, 
+										AJS.gadget.fields.projectPicker(gadget, "jiraProjectId", args.projectPickerOptions),
+										{
+											description: "__MSG_nagios-gadget.config.projectdesc__"
+										}
+									),
 									{
 										userpref: 'jiraIssueTypeId',
 										label: "__MSG_nagios-gadget.config.issuetypelabel__",
@@ -133,7 +138,12 @@
 								]
 							};
 						},
-						args: []
+						args: [
+							{
+								key: "projectPickerOptions",
+								ajaxOptions: "/rest/gadget/1.0/filtersAndProjects?showFilters=false"
+							}
+						]
 					},
 					view: {
 						enableReload: true,
@@ -169,7 +179,7 @@
 													target: "_blank",
 													title: gadgets.util.escapeString(this.status_info),
 													href: nagioscgiurl + '/extinfo.cgi?type=2&host=' + this.host 
-																+ "&service=" + this.service
+															+ "&service=" + this.service
 												}).text(this.service)
 											),
 											AJS.$("<td class='menu'/>").append(
@@ -207,40 +217,74 @@
 
 												var nagioscgiurl = gadget.getPref('nagiosCgiURL');
 
-												function renderListItem(action, url) {
+												function showMessageDisabled(){
+													AJS.messages.warning({
+														title: '__MSG_nagios-gadget.disabled.message.title__',
+														body: '<p>__MSG_nagios-gadget.disabled.message.body__ ' +
+															'<a class="a-config">__MSG_nagios-gadget.disabled.message.config__<a></p>'
+													});
+													AJS.$(document).on("aui-message-close", function (e,a) {
+														gadgets.window.adjustHeight();
+													});
+													gadgets.window.adjustHeight();
+												}
+
+												function renderListItem(action, url, disabled) {
 													var listItemNode = AJS.$("<li/>").addClass("aui-list-item");
 													var linkNode = AJS.$("<a/>").addClass("aui-list-item-link")
-														.attr({
-															target: "_blank",
-															"href": url + action.path
-														}).text(action.title);
+														.text(action.title);
 
-													linkNode.addClass(action.cssClass);;
+													if (disabled) {
+														linkNode.addClass("disabled");
+														linkNode.click(showMessageDisabled);
+														linkNode.addClass("disabled-tooltip").attr({
+															title: "__MSG_nagios-gadget.disabled.tooltip__"
+														});
+													} else {
+														linkNode.attr({
+															target : "_blank",
+															href   : url + action.path
+														});
+														linkNode.addClass(action.cssClass);
+													}
 													listItemNode.append(linkNode);
 													list.append(listItemNode);
 												}
 
 												var html= AJS.$("<div class='aui-list' />");
 												
+												var disableJiraActions = true;
+												if (gadget.getPref("jiraProjectId")) disableJiraActions = false;
+
+												// bind AUI tooltips
+												AJS.$(".disabled-tooltip").tooltip();
+
 												// nagios menu actions
 												var list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
-												AJS.$(response.nagios_actions).each(function(){renderListItem(this, nagioscgiurl)});
+												AJS.$(response.nagios_actions).each(function(){renderListItem(this, nagioscgiurl, false)});
 												
 												// jira menu actions
 												list = AJS.$("<ul class ='aui-list-section' />").appendTo(html);
-												AJS.$(response.jira_actions).each(function(){renderListItem(this, "__ATLASSIAN_BASE_URL__")});
+												AJS.$(response.jira_actions).each(function(){renderListItem(this, "__ATLASSIAN_BASE_URL__", disableJiraActions)});
 												
 												// other menu actions
 												list = AJS.$("<ul class ='aui-list-section aui-last' />").appendTo(html);
-												AJS.$(response.other_actions).each(function(){renderListItem(this, "")});
+												AJS.$(response.other_actions).each(function(){renderListItem(this, "", false)});
 
 												return html;
 											}
 										}
-                                	});
+									});
 
 									$this.click();
 								}
+							});
+
+
+							AJS.$(document.body).delegate("a.a-config", "click", function (e) {
+								e.preventDefault();
+								e.stopPropagation();
+								gadget.showConfig();
 							});
 
 							var m = moment(new Date());
@@ -288,12 +332,14 @@
 
 							gadget.showLoading();
 
+							var messageHolder = AJS.$("<div/>").attr({id: "aui-message-bar"});
 							var serviceList = AJS.$("<table/>");
 
 							populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
 							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
 
-							gadget.getView().html(serviceList);
+							gadget.getView().html(messageHolder);
+							gadget.getView().append(serviceList);
 							gadget.getFooter().html(summary);
 							gadget.getFooter().append(lastUpdated);
 
