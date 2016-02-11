@@ -80,15 +80,20 @@ public class NagiosGlance {
 
 	private NagiosGlanceAction makeActionFindRelated(String host, String projectId)
 	{
-		String jql  = "project %3D " + projectId + " AND created >%3D -60m AND text ~ " + host;
+		String jql  = "project %3D " + NagiosGlance.shortenID(projectId) + " AND created >%3D -60m AND text ~ " + host;
 		String path = "/issues/?jql=" + jql;
 		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.related"), path);
 	}
 
 	private NagiosGlanceAction makeActionCreate(String host, String svc, String projectId, String issueTypeId)
 	{
-		String path = "/secure/CreateIssue!default.jspa?pid=" + projectId + "&issuetype=" + issueTypeId;
+		String path = "/secure/CreateIssue!default.jspa?pid=" + NagiosGlance.shortenID(projectId) + "&issuetype=" + issueTypeId;
 		String cssClass = "create-issue";
 		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.create"), path, cssClass);
+	}
+
+	private static String shortenID(String longID)
+	{
+		return longID.substring(longID.lastIndexOf("-") + 1);
 	}
 }
