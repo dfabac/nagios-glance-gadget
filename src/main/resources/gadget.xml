@@ -52,6 +52,9 @@
 			span.footer-right {
 				float   : right;
 			}
+			div.all-ok {
+				margin : 20px;
+			}
 			table {
 				width   : 100%;
 			}
@@ -335,11 +338,22 @@
 							var messageHolder = AJS.$("<div/>").attr({id: "aui-message-bar"});
 							var serviceList = AJS.$("<table/>");
 
-							populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
-							populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
+							if (args.dataProblems.problems.totalProblems == 0)
+							{
+								var ok = AJS.$("<div/>").addClass("aui-message aui-message-success all-ok").append(
+									AJS.$("<p/>").addClass("title")
+										.append("__MSG_nagios-gadget.all.ok.title__"),
+									AJS.$("<p/>")
+										.append("__MSG_nagios-gadget.all.ok.body__")
+								);
+								gadget.getView().html(ok);
+							} else {
+								populate(args.dataProblems.problems.critical.items, 'critical', serviceList);
+								populate(args.dataProblems.problems.warning.items,  'warning',  serviceList);
+								gadget.getView().html(serviceList);
+							}
 
 							gadget.getView().html(messageHolder);
-							gadget.getView().append(serviceList);
 							gadget.getFooter().html(summary);
 							gadget.getFooter().append(lastUpdated);
 
