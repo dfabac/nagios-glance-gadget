@@ -87,9 +87,10 @@ public class NagiosGlance {
 
 	private NagiosGlanceAction makeActionCreate(String host, String svc, String projectId, String issueTypeId)
 	{
-		String path = "/secure/CreateIssue!default.jspa?pid=" + NagiosGlance.shortenID(projectId) + "&issuetype=" + issueTypeId;
-		String cssClass = "create-issue";
-		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.create"), path, cssClass);
+		String summary = "[NAGIOS] " + host + " - " + svc;
+		String path = "/secure/CreateIssueDetails!init.jspa?pid=" + NagiosGlance.shortenID(projectId) 
+		+ "&issuetype=" + issueTypeId + "&summary=" + summary + "&priority=3";
+		return new NagiosGlanceAction(i18n.getText("nagios-gadget.rest-res.actions.create"), path);
 	}
 
 	private static String shortenID(String longID)

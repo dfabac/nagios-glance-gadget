@@ -8,18 +8,12 @@ public class NagiosGlanceAction
 {
 	private String title = null;
 	private String path = null;
-	private String cssClass = null;
 
 	public NagiosGlanceAction() {}
 
-	public NagiosGlanceAction(String title, String path, String cssClass) {
+	public NagiosGlanceAction(String title, String path) {
 		this.title = title;
 		this.path = path;
-		this.cssClass = cssClass;
-	}
-
-	public NagiosGlanceAction(String title, String path) {
-		this(title, path, new String());
 	}
 
 	public String getTitle() {
@@ -36,13 +30,5 @@ public class NagiosGlanceAction
 
 	public void setPath(String path) {
 		this.path = path;	
-	}
-
-	public String getCssCalss() {
-		return this.cssClass;
-	}
-
-	public void setCssClass(String cssClass) {
-		this.cssClass = cssClass;	
 	}
 }

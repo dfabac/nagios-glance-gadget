@@ -248,7 +248,6 @@
 															target : "_blank",
 															href   : url + action.path
 														});
-														linkNode.addClass(action.cssClass);
 													}
 													listItemNode.append(linkNode);
 													list.append(listItemNode);
