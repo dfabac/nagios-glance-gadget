@@ -17,6 +17,7 @@
 	<msg name="nagios-gadget.config.cgidesc">Url de CGIs de Nagios</msg>
 	<msg name="nagios-gadget.config.projectlabel">Proyecto JIRA</msg>
 	<msg name="nagios-gadget.config.projectdesc">Para preselección en creación y búsquedas</msg>
+	<msg name="nagios-gadget.config.projectnone">No seleccionado</msg>
 	<msg name="nagios-gadget.config.issuetypelabel">Tipo de incidencia</msg>
 	<msg name="nagios-gadget.config.issuetypedesc">Para preselección en creación y búsquedas</msg>
 </messagebundle>

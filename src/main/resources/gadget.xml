@@ -101,6 +101,14 @@
 
 							var gadget = this;
 
+							// add "no selection" option
+							if (args.projectPickerOptions.options[0].value) {
+								args.projectPickerOptions.options.unshift({
+									"label": "__MSG_nagios-gadget.config.projectnone__", 
+									"value": null
+								});
+							}
+
 							return {
                                 fields: [
 									{

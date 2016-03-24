@@ -17,6 +17,7 @@
 	<msg name="nagios-gadget.config.cgidesc">Nagios CGI URL</msg>
 	<msg name="nagios-gadget.config.projectlabel">JIRA project</msg>
 	<msg name="nagios-gadget.config.projectdesc">Preselection in issue creation and searches</msg>
+	<msg name="nagios-gadget.config.projectnone">None selected</msg>
 	<msg name="nagios-gadget.config.issuetypelabel">Issue Type</msg>
 	<msg name="nagios-gadget.config.issuetypedesc">Preselection in issue creation and searches</msg>
 </messagebundle>
